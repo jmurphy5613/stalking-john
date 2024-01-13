@@ -1,7 +1,25 @@
-.conatiner {
+.container {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 	min-height: 100vh;
+	width: 100%;
+	background-color: #151613;
+	padding-top: 3rem;
+}
+
+.main-title {
+	font-size: 64px;
+	font-weight: 400;
+	font-family: "Outfit", sans-serif;
+	color: white;
+	margin-bottom: 1.5rem;
+}
+
+.description {
+	font-size: 24px;
+	font-weight: 400;
+	font-family: "Outfit", sans-serif;
+	color: white;
+	margin-bottom: 2rem;
 }

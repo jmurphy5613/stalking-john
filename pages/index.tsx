@@ -7,7 +7,12 @@ export default function Home() {
 		<>
 			<Navbar />
 			<div className={styles.container}>
-
+				<h1 className={styles["main-title"]}>
+					hey, here's my life.
+				</h1>
+				<h3 className={styles.description}>
+					let’s be real, instagram is chalked, so i made my own.
+				</h3>
 			</div>
 		</>
 	)
