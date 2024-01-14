@@ -1,0 +1,41 @@
+.grid {
+    display: grid;
+    width: 95%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 1rem;
+    grid-template-rows: none;
+}
+
+.grid-item {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #2B2B27;
+    border-radius: 20px;
+}
+
+.image-container {
+    width: 100%;
+    margin-top: 1rem;
+    position: relative;
+}
+
+.image {
+    border-radius: 20px;
+}
+
+.place {
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-family: "Outfit", sans-serif;
+    color: #777F76;
+}
+
+.caption {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-family: "Outfit", sans-serif;
+    color: white;
+}
