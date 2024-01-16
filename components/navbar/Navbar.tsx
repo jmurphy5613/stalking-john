@@ -10,15 +10,8 @@ const Navbar = () => {
     return (
         <div className={styles.container}>
             <div className={styles.left}>
-
-            </div>
-            <div className={styles.right}>
-                <div className={styles["pfp-container"]}>
-                    <Image alt='pfp' fill src="/pfp.jpeg" />
-                </div>
-                <h2 className={styles.name}>John Murphy</h2>
                 <div className={styles["theme-control-container"]}>
-                    <div 
+                    <div
                         className={styles["icon-container"]}
                         onMouseEnter={() => setHoveringThemeChange(true)}
                         onMouseLeave={() => setHoveringThemeChange(false)}
@@ -26,6 +19,13 @@ const Navbar = () => {
                         <Sun fill={hoveringThemeChange ? "#000000" : "#ffffff"} />
                     </div>
                 </div>
+            </div>
+            <div className={styles.right}>
+                <div className={styles["pfp-container"]}>
+                    <Image alt='pfp' fill src="/pfp.jpeg" />
+                </div>
+                <h2 className={styles.name}>John Murphy</h2>
+
             </div>
         </div>
     )

@@ -12,7 +12,8 @@
     "masonic": "^3.7.0",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-multi-carousel": "^2.8.4"
   },
   "devDependencies": {
     "@types/node": "^20",
