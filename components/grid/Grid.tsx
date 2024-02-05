@@ -10,7 +10,6 @@ import "react-multi-carousel/lib/styles.css";
 import Send from '../icons/Send';
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { likePost } from '@/convex/posts';
 import { Id } from '@/convex/_generated/dataModel';
 import User from '../icons/User';
 
@@ -46,8 +45,9 @@ const Grid = () => {
                 {isClient && <Masonry
                     items={gridItems}
                     columnGutter={20}
-                    columnCount={4}
+                    columnWidth={300}
                     render={GridItem}
+                    
                 ></Masonry>}
             </div>
 
@@ -132,7 +132,7 @@ const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, lik
                 <h2 className={styles.counter}>{claps}</h2>
             </div>
             <div className={styles.wrapper}>
-                <input placeholder='type a comment' className={styles["comment-box"]} onChange={(e) => {
+                <input placeholder='type a comment' className={styles["comment-box"]} value={textBoxValue} onChange={(e) => {
                     setTextBoxValue(e.target.value)
                 }} />
                 <div className={styles["send-icon-container"]} onClick={() => {
@@ -141,6 +141,7 @@ const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, lik
                             postId: _id,
                             comment: textBoxValue
                         })
+                        setTextBoxValue('')
                     }
                 }}>
                     <Send fill='#777F76' />
