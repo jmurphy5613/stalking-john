@@ -148,9 +148,9 @@ const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, lik
                 </div>
             </div>
             <div className={styles.comments}>
-                {comments.map((comment) => {
+                {comments.map((comment, index) => {
                     return (
-                        <div className={styles["comment-container"]}>
+                        <div className={styles["comment-container"]} key={index}>
                             <div className={styles["user-icon-component"]}>
                                 <User fill='#636363' />
                             </div>
