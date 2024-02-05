@@ -8,6 +8,11 @@ import { useEffect, useState } from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Send from '../icons/Send';
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { likePost } from '@/convex/posts';
+import { Id } from '@/convex/_generated/dataModel';
+import User from '../icons/User';
 
 interface imageItem {
     src: string,
@@ -20,73 +25,14 @@ interface GridItem {
     images: imageItem[]
     likes: number,
     hearts: number,
-    claps: number
+    claps: number,
+    comments: string[],
+    _id: Id<"posts">
 }
 
-const gridItems = [
-    {
-        place: "6/29/2023 - Wissahikon Trail",
-        caption: "wooooo, climbing so fun :)",
-        images: [
-            {
-                src: "/climbing.jpeg",
-                height: 25
-            }
-        ],
-        likes: 12,
-        hearts: 12,
-        claps: 12
-    },
-    {
-        place: "7/15/2023 - Philadelphia",
-        caption: "",
-        images: [
-            {
-                src: "/city.jpeg",
-                height: 15
-            },
-            {
-                src: "/city2.jpeg",
-                height: 15
-            }
-        ],
-        likes: 12,
-        hearts: 12,
-        claps: 12
-    },
-    {
-        place: "7/12/2023 - Bala Cynwyd Public Library",
-        caption: "kinects are objectively better than legos.",
-        images: [
-            {
-                src: "/kinects.jpeg",
-                height: 13
-            }
-        ],
-        likes: 120,
-        hearts: 12,
-        claps: 12
-    },
-    {
-        place: "6/8/2023 - Haverford Reserve",
-        caption: "scary john",
-        images: [
-            {
-                src: "/dark.jpeg",
-                height: 10
-            },
-            {
-                src: "/dark2.jpeg",
-                height: 10
-            }
-        ],
-        likes: 1,
-        hearts: 12,
-        claps: 12
-    }
-]
-
 const Grid = () => {
+
+    const gridItems = useQuery(api.posts.getPosts)
 
     const [isClient, setIsClient] = useState(false)
 
@@ -94,26 +40,43 @@ const Grid = () => {
         setIsClient(true)
     }, [])
 
+    if (gridItems) {
+        return (
+            <div className={styles["grid-container"]}>
+                {isClient && <Masonry
+                    items={gridItems}
+                    columnGutter={20}
+                    columnCount={4}
+                    render={GridItem}
+                ></Masonry>}
+            </div>
+
+        )
+    }
+
     return (
         <div className={styles["grid-container"]}>
-            {isClient && <Masonry
-                items={gridItems}
-                columnGutter={20}
-                columnCount={4}
-                render={GridItem}
-            ></Masonry>}
-        </div>
 
+        </div>
     )
+
 }
 
 interface GridItemProps {
     data: GridItem;
 }
 
-const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, likes } }) => {
+const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, likes, hearts, claps, _id, comments } }) => {
 
     const [activeSlide, setActiveSlide] = useState(0);
+
+    const clapPost = useMutation(api.posts.clapPost)
+    const heartPost = useMutation(api.posts.heartPost)
+    const likePost = useMutation(api.posts.likePost)
+
+    const commentPost = useMutation(api.posts.commentPost)
+
+    const [textBoxValue, setTextBoxValue] = useState('')
 
     const [isHovering, setIsHovering] = useState(false)
 
@@ -143,26 +106,58 @@ const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, lik
                 </Carousel>
             </div>
             <div className={styles.interactions}>
-                <div className={styles["interaction-icon-container"]}>
+                <div className={styles["interaction-icon-container"]} onClick={async () => {
+                    await likePost({
+                        postId: _id
+                    })
+                }}>
                     <h1 className={styles.interaction}>👍</h1>
                 </div>
                 <h2 className={styles.counter}>{likes}</h2>
-                <div className={styles["interaction-icon-container"]} style={{ marginLeft: '0.5rem' }}>
+                <div className={styles["interaction-icon-container"]} style={{ marginLeft: '0.5rem' }} onClick={async () => {
+                    await heartPost({
+                        postId: _id
+                    })
+                }}>
                     <h1 className={styles.interaction}>❤️</h1>
                 </div>
-                <h2 className={styles.counter}>{likes}</h2>
-                <div className={styles["interaction-icon-container"]} style={{ marginLeft: '0.5rem' }}>
+                <h2 className={styles.counter}>{hearts}</h2>
+                <div className={styles["interaction-icon-container"]} style={{ marginLeft: '0.5rem' }} onClick={async () => {
+                    await clapPost({
+                        postId: _id
+                    })
+                }}>
                     <h1 className={styles.interaction}>👏</h1>
                 </div>
-                <h2 className={styles.counter}>{likes}</h2>
+                <h2 className={styles.counter}>{claps}</h2>
             </div>
             <div className={styles.wrapper}>
-                <input placeholder='type a comment' className={styles["comment-box"]} />
-                <div className={styles["send-icon-container"]}>
+                <input placeholder='type a comment' className={styles["comment-box"]} onChange={(e) => {
+                    setTextBoxValue(e.target.value)
+                }} />
+                <div className={styles["send-icon-container"]} onClick={() => {
+                    if (textBoxValue.length > 0) {
+                        commentPost({
+                            postId: _id,
+                            comment: textBoxValue
+                        })
+                    }
+                }}>
                     <Send fill='#777F76' />
                 </div>
             </div>
-
+            <div className={styles.comments}>
+                {comments.map((comment) => {
+                    return (
+                        <div className={styles["comment-container"]}>
+                            <div className={styles["user-icon-component"]}>
+                                <User fill='#636363' />
+                            </div>
+                            <h2 className={styles.comment}>{comment}</h2>
+                        </div>
+                    )
+                })}
+            </div>
 
         </div>
     )

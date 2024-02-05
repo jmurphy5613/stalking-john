@@ -12,5 +12,6 @@ export default defineSchema({
             src: v.string(),
             height: v.number(),
         })),
+        comments: v.array(v.string())
     })
 })
