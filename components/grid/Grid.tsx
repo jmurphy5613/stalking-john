@@ -12,6 +12,10 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from '@/convex/_generated/dataModel';
 import User from '../icons/User';
+// import { gridItems } from '@/utils/constants';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface imageItem {
     src: string,
@@ -26,12 +30,13 @@ interface GridItem {
     hearts: number,
     claps: number,
     comments: string[],
-    _id: Id<"posts">
+    _id: Id<"posts">,
 }
 
 const Grid = () => {
 
     const gridItems = useQuery(api.posts.getPosts)
+
 
     const [isClient, setIsClient] = useState(false)
 
@@ -39,34 +44,60 @@ const Grid = () => {
         setIsClient(true)
     }, [])
 
+    const emptyTextAlert = () => toast.error('You must enter a comment')
+    const characterLimitAlert = () => toast.error('Your comment must be less than 140 characters')
+
     if (gridItems) {
         return (
-            <div className={styles["grid-container"]}>
-                {isClient && <Masonry
-                    items={gridItems}
-                    columnGutter={20}
-                    columnWidth={300}
-                    render={GridItem}
-                    
-                ></Masonry>}
-            </div>
+            <>
+                <div className={styles["grid-container"]}>
+                    {isClient && <Masonry
+                        items={gridItems}
+                        columnGutter={20}
+                        columnWidth={300}
+                        render={(cardProps) => <GridItem data={cardProps.data} 
+                            characterLimitAlert={characterLimitAlert}
+                            emptyTextAlert={emptyTextAlert} 
+                        /> 
+                        }
+                    ></Masonry>}
+                </div>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
+            </>
+
 
         )
     }
 
     return (
-        <div className={styles["grid-container"]}>
+        <>
 
-        </div>
+            <div className={styles["grid-container"]}>
+            </div>
+        </>
+
     )
 
 }
 
 interface GridItemProps {
     data: GridItem;
+    characterLimitAlert: () => void;
+    emptyTextAlert: () => void;
 }
 
-const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, likes, hearts, claps, _id, comments } }) => {
+const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, likes, hearts, claps, _id, comments }, characterLimitAlert, emptyTextAlert  }) => {
 
     const [activeSlide, setActiveSlide] = useState(0);
 
@@ -79,6 +110,7 @@ const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, lik
     const [textBoxValue, setTextBoxValue] = useState('')
 
     const [isHovering, setIsHovering] = useState(false)
+
 
     return (
         <div className={styles["grid-item"]}>
@@ -136,7 +168,13 @@ const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, lik
                     setTextBoxValue(e.target.value)
                 }} />
                 <div className={styles["send-icon-container"]} onClick={() => {
-                    if (textBoxValue.length > 0) {
+                    console.log(textBoxValue.length)
+                    if (textBoxValue.length === 0) {
+                        console.log("hey")
+                        emptyTextAlert()
+                    } else if (textBoxValue.length > 140) {
+                        characterLimitAlert()
+                    } else {
                         commentPost({
                             postId: _id,
                             comment: textBoxValue

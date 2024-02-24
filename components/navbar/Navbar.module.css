@@ -21,12 +21,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.5s;
+}
+.theme-control-container:hover {
+
+
 }
 
 .icon-container {
     position: relative;
     height: 40px;
     width: 40px;
+}
+.icon-container:hover  {
+    cursor: pointer;
 }
 
 .pfp-container {

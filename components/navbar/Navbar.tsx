@@ -6,17 +6,35 @@ import Image from 'next/image'
 const Navbar = () => {
 
     const [hoveringThemeChange, setHoveringThemeChange] = useState<boolean>(false)
+    const [isLightTheme, setIsLightTheme] = useState<boolean>(false)
+
+    console.log(hoveringThemeChange)
+
+    const getSunColor = () => {
+        if (hoveringThemeChange && isLightTheme) return "#fff"
+        if (hoveringThemeChange && !isLightTheme) return "#000"
+        if (!hoveringThemeChange && isLightTheme) return "#000"
+        if (!hoveringThemeChange && !isLightTheme) return "#fff"
+    }
+
+    const getSunBackgroundColor = () => {
+        if (hoveringThemeChange && isLightTheme) return "#151613"
+        if (hoveringThemeChange && !isLightTheme) return "#fff"
+        if (!hoveringThemeChange && isLightTheme) return "#fff"
+        if (!hoveringThemeChange && !isLightTheme) return "#151613"
+    }
 
     return (
         <div className={styles.container}>
             <div className={styles.left}>
-                <div className={styles["theme-control-container"]}>
+                <div className={styles["theme-control-container"]} style={{ backgroundColor: getSunBackgroundColor() }}>
                     <div
                         className={styles["icon-container"]}
                         onMouseEnter={() => setHoveringThemeChange(true)}
                         onMouseLeave={() => setHoveringThemeChange(false)}
+                        onClick={() => setIsLightTheme(!isLightTheme)}
                     >
-                        <Sun fill={hoveringThemeChange ? "#000000" : "#ffffff"} />
+                        <Sun fill={getSunColor()} />
                     </div>
                 </div>
             </div>
