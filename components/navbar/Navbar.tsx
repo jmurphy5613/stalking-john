@@ -2,10 +2,13 @@ import styles from './Navbar.module.css'
 import Sun from '../icons/Sun'
 import { useState } from 'react'
 import Image from 'next/image'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-const Navbar = () => {
+interface NavbarProps {
+    lightMode: () => void,
+    darkMode: () => void
+}
+
+const Navbar: React.FC<NavbarProps> = ({ lightMode, darkMode }) => {
 
     const [hoveringThemeChange, setHoveringThemeChange] = useState<boolean>(false)
     const [isLightTheme, setIsLightTheme] = useState<boolean>(false)
@@ -37,9 +40,9 @@ const Navbar = () => {
                             onMouseLeave={() => setHoveringThemeChange(false)}
                             onClick={() => {
                                 if (isLightTheme) {
-                                    toast.info('There you go! Dark mode.')
+                                    lightMode()
                                 } else {
-                                    toast.error('Light mode???? No.')
+                                    darkMode()
                                 }
                                 setIsLightTheme(!isLightTheme)
 
@@ -57,18 +60,6 @@ const Navbar = () => {
 
                 </div>
             </div>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </>
 
     )
