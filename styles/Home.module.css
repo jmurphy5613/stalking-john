@@ -27,6 +27,7 @@
 @media screen and (max-width: 768px) {
 	.main-title {
 		font-size: 48px;
+		text-align: center;
 	}
 	.description {
 		font-size: 20px;
