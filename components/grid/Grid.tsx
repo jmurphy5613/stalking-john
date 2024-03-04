@@ -17,7 +17,6 @@ import { useWindowSize } from "@react-hook/window-size";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { posix } from 'path';
 
 interface imageItem {
     src: string,

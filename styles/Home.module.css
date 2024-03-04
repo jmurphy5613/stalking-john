@@ -23,3 +23,15 @@
 	color: white;
 	margin-bottom: 2rem;
 }
+
+@media screen and (max-width: 768px) {
+	.main-title {
+		font-size: 48px;
+	}
+	.description {
+		font-size: 20px;
+		width: 80%;
+		text-align: center;
+	}
+	
+}

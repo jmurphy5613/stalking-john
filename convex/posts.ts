@@ -21,6 +21,13 @@ export const addData = internalMutation({
                     comments: []
                 })
             }
+
+            //if the item does exist, update the images array
+            if (itemExists) {
+                await ctx.db.patch(itemExists._id, {
+                    images: item.images
+                })
+            }
         })
     },
 })
