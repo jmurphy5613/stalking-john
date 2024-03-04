@@ -2,7 +2,7 @@
 
 import styles from './Grid.module.css'
 import Image from 'next/image'
-import { Masonry } from "masonic";
+import { Masonry, useResizeObserver, usePositioner } from "masonic";
 import { useEffect, useState } from 'react';
 
 import Carousel from "react-multi-carousel";
@@ -12,10 +12,12 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from '@/convex/_generated/dataModel';
 import User from '../icons/User';
+import { useWindowSize } from "@react-hook/window-size";
 // import { gridItems } from '@/utils/constants';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { posix } from 'path';
 
 interface imageItem {
     src: string,
@@ -38,29 +40,39 @@ const Grid = () => {
     const gridItems = useQuery(api.posts.getPosts)
 
 
-    const [isClient, setIsClient] = useState(false)
+    const [isClient, setIsClient] = useState(true)
+
+    const [gutter, setGutter] = useState(20)
+
 
     useEffect(() => {
         setIsClient(true)
+        setTimeout(() => {
+            setGutter(21)
+        }, 500)
     }, [])
+
 
     const emptyTextAlert = () => toast.error('You must enter a comment')
     const characterLimitAlert = () => toast.error('Your comment must be less than 140 characters')
 
-    if (gridItems) {
+    if (gridItems && isClient) {
         return (
             <>
+
                 <div className={styles["grid-container"]}>
                     {isClient && <Masonry
                         items={gridItems}
-                        columnGutter={20}
-                        columnWidth={300}
-                        render={(cardProps) => <GridItem data={cardProps.data} 
+                        render={(cardProps) => <GridItem data={cardProps.data}
                             characterLimitAlert={characterLimitAlert}
-                            emptyTextAlert={emptyTextAlert} 
-                        /> 
-                        }
+                            emptyTextAlert={emptyTextAlert}
+                        />}
+                        overscanBy={2}
+                        maxColumnCount={4}
+                        columnGutter={gutter}
+                        ssrWidth={1200}
                     ></Masonry>}
+
                 </div>
                 <ToastContainer
                     position="top-right"
@@ -97,7 +109,7 @@ interface GridItemProps {
     emptyTextAlert: () => void;
 }
 
-const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, likes, hearts, claps, _id, comments }, characterLimitAlert, emptyTextAlert  }) => {
+const GridItem: React.FC<GridItemProps> = ({ data: { place, caption, images, likes, hearts, claps, _id, comments }, characterLimitAlert, emptyTextAlert }) => {
 
     const [activeSlide, setActiveSlide] = useState(0);
 

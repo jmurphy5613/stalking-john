@@ -112,7 +112,7 @@ export const gridItems = [
             {
                 src: "https://i.imgur.com/n9krTBh.jpg",
                 height: 20,
-            }, 
+            },
             {
                 src: "https://i.imgur.com/oMveXsm.jpg",
                 height: 20
@@ -228,5 +228,40 @@ export const gridItems = [
         hearts: 0,
         claps: 0,
         comments: []
+    },
+    {
+        place: "1/14/2024 - Wachuset",
+        caption: "caught in a snowstorm",
+        images: [
+            {
+                src: "https://i.imgur.com/Jeq470f.jpg",
+                height: 20
+            },
+            {
+                src: "https://i.imgur.com/GeL1G8H.jpg",
+                height: 20
+            },
+            {
+                src: "https://i.imgur.com/9cOm3Ey.jpg",
+                height: 20
+            },
+            {
+                src: "https://i.imgur.com/Uqko6QG.jpg",
+                height: 20
+            },
+            {
+                src: "https://i.imgur.com/IVOJqcL.jpg",
+                height: 20
+            },
+            {
+                src: "https://i.imgur.com/oc1Dzay.jpg",
+                height: 20
+            }
+        ],
+        likes: 0,
+        hearts: 0,
+        claps: 0,
+        comments: []
     }
+
 ]
